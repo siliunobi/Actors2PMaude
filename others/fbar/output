@@ -1,0 +1,43 @@
+==========================================
+rewrite in TEST : initState .
+rewrites: 742 in 0ms cpu (1ms real) (792735 rewrites/second)
+result Config: 
+{
+< 0 : Node | neighbors: (1 ; 2),mem: (mmetric |-> 5),table: (sid(0, 1) |-> map(
+    3, 2, 5)),buffer: ept > 
+< 1 : Node | neighbors: 3,mem: (mmetric |-> 7, sid(0, 1) |-> 12),table: (sid(0,
+    1) |-> map(3, 3, 12)),buffer: ept > 
+< 2 : Node | neighbors: 3,mem: (mmetric |-> 3, sid(0, 1) |-> 8),table: (sid(0,
+    1) |-> map(3, 3, 8)),buffer: ept > 
+< 3 : Node | neighbors: (1 ; 2),mem: (mmetric |-> 2, sid(0, 1) |-> 8),table:
+    empty,buffer: ept > |
+4.3003167178378101}
+==========================================
+rewrite in TEST : initState .
+rewrites: 741 in 0ms cpu (0ms real) (2537671 rewrites/second)
+result Config: 
+{
+< 0 : Node | neighbors: (1 ; 2),mem: (mmetric |-> 5),table: (sid(0, 1) |-> map(
+    3, 2, 5)),buffer: ept > 
+< 1 : Node | neighbors: 3,mem: (mmetric |-> 7, sid(0, 1) |-> 12),table: (sid(0,
+    1) |-> map(3, 3, 12)),buffer: ept > 
+< 2 : Node | neighbors: 3,mem: (mmetric |-> 3, sid(0, 1) |-> 8),table: (sid(0,
+    1) |-> map(3, 3, 8)),buffer: ept > 
+< 3 : Node | neighbors: (1 ; 2),mem: (mmetric |-> 2, sid(0, 1) |-> 8),table:
+    empty,buffer: ept > |
+1.199177119299347e+1}
+==========================================
+rewrite in TEST : initState .
+rewrites: 741 in 0ms cpu (0ms real) (~ rewrites/second)
+result Config: 
+{
+< 0 : Node | neighbors: (1 ; 2),mem: (mmetric |-> 5),table: (sid(0, 1) |-> map(
+    3, 2, 5)),buffer: ept > 
+< 1 : Node | neighbors: 3,mem: (mmetric |-> 7, sid(0, 1) |-> 12),table: (sid(0,
+    1) |-> map(3, 3, 12)),buffer: ept > 
+< 2 : Node | neighbors: 3,mem: (mmetric |-> 3, sid(0, 1) |-> 8),table: (sid(0,
+    1) |-> map(3, 3, 8)),buffer: ept > 
+< 3 : Node | neighbors: (1 ; 2),mem: (mmetric |-> 2, sid(0, 1) |-> 8),table:
+    empty,buffer: ept > |
+2.6702729171282769e+1}
+Bye.

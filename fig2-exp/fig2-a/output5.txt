@@ -1,0 +1,18 @@
+Result: 0.6206896551724134
+Running time: 2.811
+
+Result: 0.6206896551724134
+Running time: 2.788
+
+Result: 0.6206896551724134
+Running time: 2.731
+
+Result: 0.6206896551724134
+Running time: 2.711
+
+Result: 0.6206896551724134
+Running time: 2.707
+
+Result: 0.6206896551724134
+Running time: 2.705
+

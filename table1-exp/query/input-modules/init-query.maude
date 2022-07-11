@@ -1,0 +1,78 @@
+load query
+
+mod INIT-QUERY is
+  inc QUERY .
+  
+  ops c1 c2 c3 s1 s2 s3 : -> Oid [ctor] . 
+  ops k1 k2 k3 : -> Key [ctor] .
+   
+  op initconf : -> Config .
+  eq initconf =
+  ---(
+     (to c1 : read(1,k1))  
+     (to c2 : read(2,k2))
+     (to c3 : read(3,k3))
+ 
+     (to s1 : write(k1,1,101)) 
+     (to s2 : write(k1,1,101))
+     (to s3 : write(k2,2,102))
+
+     (to s1 : write(k3,3,103))
+     (to s2 : write(k2,2,102))
+     (to s3 : write(k3,3,103))     
+  )
+  
+     (to c1 : read(1,k1))  
+     (to c2 : read(2,k2))  
+     
+     (to s1 : write(k1,1,101)) 
+     (to s2 : write(k1,1,101))
+     
+     (to s3 : write(k2,2,102))
+     (to s2 : write(k2,2,102))
+     
+     < c1 : Client | queries: ept, waiting: empty, results: empty,
+                     replicas: (k1 |-> (s1 ; s2), k2 |-> (s2 ; s3), k3 |-> (s1 ; s3)) >
+     < c2 : Client | queries: ept, waiting: empty, results: empty,
+                     replicas: (k1 |-> (s1 ; s2), k2 |-> (s2 ; s3), k3 |-> (s1 ; s3)) >
+     < c3 : Client | queries: ept, waiting: empty, results: empty,
+                     replicas: (k1 |-> (s1 ; s2), k2 |-> (s2 ; s3), k3 |-> (s1 ; s3)) >
+                     
+     < s1 : Server | database: (k1 |-> < 11, 1 >, k3 |-> < 13, 3 >) >
+     < s2 : Server | database: (k1 |-> < 11, 1 >, k2 |-> < 12, 2 >) >
+     < s3 : Server | database: (k2 |-> < 12, 2 >, k3 |-> < 13, 3 >) > .
+endm
+
+load model-checker
+mod MC is
+  inc INIT-QUERY .
+  inc MODEL-CHECKER .  
+
+  subsort Config < State .
+    
+  var P : Prop .
+  var C : Config .  vars O O' : Oid .  vars DB DB' : Map{Key,Data} . 
+  var K : Key .  vars V V' : Value .  vars TS TS' : Timestamp .
+  vars AS AS' : Attributes .  var RS : Map{Id,Data} .
+  var ID : Id .
+
+  eq C |= P = true [owise] .
+  
+  op eventual : -> Prop [ctor] .
+ ceq < O : Server  | database: (K |-> < V,TS >, DB), AS > 
+     < O' : Server | database: (K |-> < V',TS' >, DB'), AS' > C |= eventual = false 
+     if V =/= V' .
+     
+  op strong : -> Prop [ctor] .
+ ceq < O : Client  | results:  (ID |-> < K,V,TS >, RS), AS >  
+     < O' : Server | database: (K |-> < V',TS' >, DB), AS' > C |= strong = false
+     if TS' > TS /\ V =/= 0 /\ TS =/= 0 .
+     
+endm
+
+---rew initconf .
+
+---search initconf =>! C:Config .
+
+red modelCheck(initconf, [] strong) .
+red modelCheck(initconf, <>[] eventual) .

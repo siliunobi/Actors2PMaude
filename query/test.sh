@@ -1,0 +1,1 @@
+./run.sh -smc on -tr query.maude init-query.maude pi-query.maude events-query.maude -pv latency.quatex 0.05 0.01 serverlist

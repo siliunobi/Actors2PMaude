@@ -1,0 +1,40 @@
+
+Server is now accepting a new connection...
+Server addresses: 
+localhost:49046
+
+Verification Parameters: 
+model: 		test.maude
+formula: 		eventual.quatex
+alpha: 		0.01
+beta: 		0.01
+delta1: 		0.01
+delta2: 		0.01
+pstop: 		0.05
+bias: 		1.0
+caching: 		0
+max: 		10000000
+kfactor: 		1
+model arguments:	
+ModelChecker preparing to model check quatex formula
+Thread for localhost:49046 is ready.
+Running the simulations... Please wait.
+
+Parameters: 
+model: 		test.maude
+model arguments: 	
+formula: 	eventual.quatex
+alpha: 		0.01
+beta: 		0.0
+seed: 	1669130500
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Server: Running the simulation batches on demand... Please wait.
+samples generated = 60
+Result: 1.0
+Running time: 1.147 seconds
+
+done.
+Server performed 1 batch(es) of 60 simulation(s) each.
+
+Server is now accepting a new connection...

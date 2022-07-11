@@ -1,0 +1,22 @@
+load ../events
+load query
+
+mod EVENTS-QUERY is 
+  inc EVENTS + OBJS .
+  
+  *** user-specified interesting events 
+  ops startQuery endQuery : Id -> Event [ctor] .
+  
+  ops wrt rd db : Key Data -> Event [ctor] .
+
+  var ID : Id .  var O : Oid .
+  var K : Key .  var V : Value .  var TS : Timestamp .
+  var DB : Map{Key,Data} .  var DAT' : Data .
+  
+  *** rule-specific mapping
+  eq eventMap = ['issue, startQuery(ID)] ;; 
+                ['update, endQuery(ID) :: rd(K,DAT')] ;;
+                ['last, endQuery(ID) :: rd(K,DAT')] ;;
+                ['write, wrt(K,< V,TS >) :: db(K,insert(K,< V,TS >,DB)[K])] 
+                [nonexec] .
+endm

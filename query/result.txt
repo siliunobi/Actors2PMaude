@@ -1,0 +1,4 @@
+Confidence (alpha): 0.05
+Threshold (delta): 0.01
+Samples generated: 60
+SMC result: 5.9501443870550315

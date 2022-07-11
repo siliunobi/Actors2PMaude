@@ -1,0 +1,6 @@
+                    uniform hotspot zipf
+"5\% (write-heavy)"	0.989	  0.863	  0.485
+"50\% (medium)"	    0.992	  0.938	  0.478
+"95\% (read-heavy)"	1	      0.998	  0.589
+
+

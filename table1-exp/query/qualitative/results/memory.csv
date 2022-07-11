@@ -1,0 +1,9 @@
+filename,module,initial,formula,strategy,opaque,expected,logic,backend,total,peak,stack
+init-query.maude,MC,initconf,[] strong,,,False,LTL,maude,33488896,33488896,106496
+init-query.maude,MC,initconf,[] strong,,,False,LTL,ltsmin,45887488,45887488,102400
+init-query.maude,MC,initconf,[] strong,,,False,LTL,nusmv,1081999360,1081999360,1683456
+init-query.maude,MC,initconf,[] strong,,,False,LTL,spot,71000064,71000064,106496
+init-query.maude,MC,initconf,<>[] eventual,,,True,LTL,maude,49995776,49995776,106496
+init-query.maude,MC,initconf,<>[] eventual,,,True,LTL,ltsmin,78807040,78807040,155648
+init-query.maude,MC,initconf,<>[] eventual,,,True,LTL,nusmv,1070571520,1070571520,1679360
+init-query.maude,MC,initconf,<>[] eventual,,,True,LTL,spot,71258112,71258112,106496

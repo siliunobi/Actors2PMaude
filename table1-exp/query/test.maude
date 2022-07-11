@@ -1,0 +1,88 @@
+***load p-output/init-query
+load m-output/init-query
+
+mod TEST is
+  inc INTERFACE .
+  inc INIT-QUERY .
+
+  *** PVeStA interface
+  eq initState = init(initconf) .  
+  
+  op initConfig : -> Config .
+  eq initConfig = run(initState) .
+
+
+  vars T T' : Float .  var C : Config .  var OBJS : Objects . 
+  vars TES TES1 TES2 TES3 : TimedEvents .  var ID : Id .
+  var K : Key .  var DATA DATA' : Data .
+  
+  *** Quatex
+  op prop : Config -> Float .
+  eq prop({ C | T }) = T / 3.0 .
+  
+  op avgLatency : Config -> Float .
+  eq avgLatency({< log : Monitor | events: TES > C | T }) = totalLatency(TES) / numberOfQueries(TES) .
+
+  op totalLatency : TimedEvents -> Float .
+  eq totalLatency(TES1 ; (startQuery(ID) @ T) ; TES2 ; (endQuery(ID) @ T') ; TES3) 
+   = totalLatency(TES1 ; TES2 ; TES3) + T' - T .
+  eq totalLatency(TES) = 0.0 [owise] .
+  
+  op numberOfQueries : TimedEvents -> Float .
+  eq numberOfQueries(TES1 ; (startQuery(ID) @ T) ; TES2 ; (endQuery(ID) @ T') ; TES3)
+   = numberOfQueries(TES1 ; TES2 ; TES3) + 1.0 .
+  eq numberOfQueries(TES) = 0.0 [owise] .
+  
+  *** eventual
+  op eventual : Config -> Float .
+ ceq eventual({< log : Monitor | events: TES > OBJS | T }) 
+   = eventual(TES) if not objectEnabled(OBJS) .
+  
+  op eventual : TimedEvents -> Float .
+ ceq eventual(TES1 ; (db(K,DATA) @ T) ; TES2 ; (db(K,DATA') @ T') ; TES3) = 0.0 
+     if DATA =/= DATA' .
+  eq eventual(TES) = 1.0 [owise] .
+  
+  
+  *** strong
+
+  op strong : Config -> Float .
+ ceq strong({< log : Monitor | events: TES > OBJS | T }) 
+   = strong(TES) if not objectEnabled(OBJS) .
+  
+  ---(
+ ceq strong({< log : Monitor | events: TES > C | T }) 
+   = strong(TES) / numberOfReads(TES) if TES =/= empty .
+  )
+  ---
+  op strong : TimedEvents -> Float .
+ ceq strong(TES1 ; (wrt(K,DATA) @ T) ; TES2 ; (rd(K,DATA') @ T') ; TES3) = 0.0
+     if DATA =/= DATA' /\ T < T' /\ noWriteOn(K,TES2) .
+  eq strong(TES) = 1.0 [owise] . 
+  
+  
+  op noWriteOn : Key TimedEvents -> Bool .
+  eq noWriteOn(K, (TES1 ; (wrt(K,DATA) @ T) ; TES2)) = false .
+  eq noWriteOn(K, TES) = true [owise] .
+  ---(
+  op strong : TimedEvents -> Float .   
+ ceq strong(TES1 ; (wrt(K,DATA) @ T) ; TES2 ; (rd(K,DATA) @ T') ; TES3)
+   = strong(TES1 ; (wrt(K,DATA) @ T) ; TES2 ; TES3) + 1.0
+     if T < T' /\ noWriteOn(K,TES2) .  
+  eq strong(TES) = 0.0 [owise] .
+  
+  op numberOfReads : TimedEvents -> Float .
+  eq numberOfReads(TES1 ; (rd(K,DATA) @ T) ; TES2)
+   = numberOfReads(TES1 ; TES2) + 1.0 .
+  eq numberOfReads(TES) = 0.0 [owise] .
+  )
+  
+  eq val(10,C) = prop(C) .
+  eq val(11,C) = avgLatency(C) .
+  eq val(12,C) = eventual(C) .
+  eq val(13,C) = strong(C) .  
+endm
+
+set clear rules off .
+
+---rew eventual(initConfig) .

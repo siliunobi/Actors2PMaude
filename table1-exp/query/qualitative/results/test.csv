@@ -1,0 +1,25 @@
+filename,module,initial,formula,strategy,opaque,expected,logic,backend,result,states,real_states,buchi,clength,rewrites,time_ms,prep_ms
+init-query.maude,MC,initconf,[] strong,,,False,LTL,maude,False,120,,2,17,1825,2.763274,
+init-query.maude,MC,initconf,[] strong,,,False,LTL,maude,False,120,,2,17,1824,2.308644,
+init-query.maude,MC,initconf,[] strong,,,False,LTL,maude,False,120,,2,17,1824,2.193171,
+init-query.maude,MC,initconf,[] strong,,,False,LTL,ltsmin,False,164,,2,,4270,81.981422,
+init-query.maude,MC,initconf,[] strong,,,False,LTL,ltsmin,False,164,,2,,4270,71.935678,
+init-query.maude,MC,initconf,[] strong,,,False,LTL,ltsmin,False,164,,2,,4270,71.63398,
+init-query.maude,MC,initconf,[] strong,,,False,LTL,nusmv,False,4900,,,17,103745,18980.367121,193.13695
+init-query.maude,MC,initconf,[] strong,,,False,LTL,nusmv,False,4900,,,17,103745,19032.400241,178.531844
+init-query.maude,MC,initconf,[] strong,,,False,LTL,nusmv,False,4900,,,17,103745,19069.742903,180.16645
+init-query.maude,MC,initconf,[] strong,,,False,LTL,spot,False,4900,,2,17,103745,213.953957,201.052029
+init-query.maude,MC,initconf,[] strong,,,False,LTL,spot,False,4900,,2,17,103745,206.502022,193.539342
+init-query.maude,MC,initconf,[] strong,,,False,LTL,spot,False,4900,,2,17,103745,207.690983,194.530281
+init-query.maude,MC,initconf,<>[] eventual,,,True,LTL,maude,True,4900,,2,,94724,146.612116,
+init-query.maude,MC,initconf,<>[] eventual,,,True,LTL,maude,True,4900,,2,,94724,138.221994,
+init-query.maude,MC,initconf,<>[] eventual,,,True,LTL,maude,True,4900,,2,,94724,138.800236,
+init-query.maude,MC,initconf,<>[] eventual,,,True,LTL,ltsmin,True,4900,,2,,226542,251.063182,
+init-query.maude,MC,initconf,<>[] eventual,,,True,LTL,ltsmin,True,4900,,2,,226542,241.908574,
+init-query.maude,MC,initconf,<>[] eventual,,,True,LTL,ltsmin,True,4900,,2,,226542,238.464261,
+init-query.maude,MC,initconf,<>[] eventual,,,True,LTL,nusmv,True,4900,,,,94718,7096.696474,194.621937
+init-query.maude,MC,initconf,<>[] eventual,,,True,LTL,nusmv,True,4900,,,,94718,7084.533038,187.31971
+init-query.maude,MC,initconf,<>[] eventual,,,True,LTL,nusmv,True,4900,,,,94718,7114.763841,189.39146
+init-query.maude,MC,initconf,<>[] eventual,,,True,LTL,spot,True,4900,,1,,94718,216.248399,209.294132
+init-query.maude,MC,initconf,<>[] eventual,,,True,LTL,spot,True,4900,,1,,94718,210.206846,203.090869
+init-query.maude,MC,initconf,<>[] eventual,,,True,LTL,spot,True,4900,,1,,94718,209.826401,202.571

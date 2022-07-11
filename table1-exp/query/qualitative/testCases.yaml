@@ -1,0 +1,9 @@
+root: ../input-modules
+suite:
+  - file: init-query.maude
+    initial: initconf
+    cases:
+      - formula: '[] strong'
+        result: false
+      - formula: <>[] eventual
+        result: true

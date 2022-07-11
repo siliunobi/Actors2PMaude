@@ -1,0 +1,115 @@
+load ../apmaude
+
+mod SORTS is
+  inc SCHEDULING .
+  
+  sort MutexState .
+  ops outsideCS waitForCS insideCS : -> MutexState [ctor] .
+  
+  sort OidList .
+  subsort Oid < OidList .
+  op emptyOidList : -> OidList [ctor] .
+  op _;;_ : OidList OidList -> OidList [ctor assoc id: emptyOidList] .
+  
+  sorts WaitTime WaitTimes .
+  subsort WaitTime < WaitTimes .
+  op <_`,_> : Oid Float -> WaitTime .
+  op empty : -> WaitTimes [ctor] .
+  op _;_ : WaitTimes WaitTimes -> WaitTimes [ctor comm assoc id: empty] .    
+endm
+
+mod OBJS is
+  inc SORTS .
+  
+  op Node  :              -> ObjType .
+  op state:_ : MutexState -> Attribute .
+  op next:_  : Oid        -> Attribute .
+  
+  *** Msgs ***
+  op start : -> Payload .
+  op token : -> Payload .
+endm
+
+load ../input-modules/pi-tokenring.maude
+load ../sampling-lib
+
+mod TOKENRING is
+  inc PI-TOKENRING .
+  inc SAMPLING-LIB .
+  inc OBJS .
+  
+  vars O O' O'' : Oid .
+  vars AS : Attributes .
+
+  rl [wantToEnterCS] :
+  {
+    (to O : start)
+    < O : Node | state: outsideCS, AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  =>
+  {
+    < O : Node | state: waitForCS, AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  } .
+
+
+  rl [getToken1] :
+  {
+    (to O' from O : token)
+    < O' : Node | state: outsideCS, next: O'', AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  =>
+  {
+    < O' : Node | state: outsideCS, next: O'', AS >
+    delay-getToken1(O',O,O'',AS,sort(  (to O'' from O' : token)  ))
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  } .
+
+  op delay-getToken1 : Oid Oid Oid Attributes MsgList -> DTask .
+  rl [delay-getToken1-1] :
+    { delay-getToken1(O',O,O'',AS,(@M:Msg :: @ML:MsgList)) @C:Config | @T:Float }
+  =>
+    { delay-getToken1(O',O,O'',AS,@ML:MsgList) @C:Config
+    [@T:Float + (delta-getToken1(O',O,O'',AS)[sample(uniform(1.0,5.0))[rand]]), @M:Msg] | @T:Float } .
+  rl [delay-getToken1-2] : delay-getToken1(O',O,O'',AS,nil) => null .
+
+  
+  rl [getToken2] :
+  {
+    (to O' from O : token)
+    < O' : Node | state: waitForCS, AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  =>
+  {
+    < O' : Node | state: insideCS, AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  } .
+
+
+  rl [exitCS] :
+  {
+    < O : Node | state: insideCS, next: O', AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  =>
+  {
+    < O : Node | state: outsideCS, next: O', AS >
+    delay-exitCS(O,O',AS,sort(  (to O' from O : token)  ))
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  } .
+
+  op delay-exitCS : Oid Oid Attributes MsgList -> DTask .
+  rl [delay-exitCS-1] :
+    { delay-exitCS(O,O',AS,(@M:Msg :: @ML:MsgList)) @C:Config | @T:Float }
+  =>
+    { delay-exitCS(O,O',AS,@ML:MsgList) @C:Config
+    [@T:Float + (delta-exitCS(O,O',AS)[sample(uniform(1.0,5.0))[rand]]), @M:Msg] | @T:Float } .
+  rl [delay-exitCS-2] : delay-exitCS(O,O',AS,nil) => null .
+
+  eq objectEnabled(< O : Node | state: insideCS, next: O', AS > )
+    = true .
+
+endm

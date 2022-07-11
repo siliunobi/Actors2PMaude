@@ -1,0 +1,21 @@
+1. Copy here the contents of 
+
+	https://maude.ucm.es/strategies/maude+strat-linux.tar.gz
+
+if using Linux, or
+
+	https://maude.ucm.es/strategies/maude+strat-osx.tar.gz
+
+if using macOS. This includes the Maude language plugin for LTSmin.
+
+2. Copy the contents of
+
+	https://maude.ucm.es/strategies/btimemc-aux-linux.tar.xz
+	https://github.com/utwente-fmt/ltsmin/releases/download/v3.0.2/ltsmin-v3.0.2-linux.tgz
+
+if using Linux (the first file is smaller), or
+
+	https://maude.ucm.es/strategies/btimemc-aux-linux.tar.xz
+	https://github.com/utwente-fmt/ltsmin/releases/download/v3.0.2/ltsmin-v3.0.2-osx.tgz
+
+if using Mac. This is LTSmin. The bin directory of the package should be in the root of the ltsmin_maude directory.

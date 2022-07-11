@@ -1,0 +1,34 @@
+load aodv
+
+mod INIT-AODV is 
+  inc AODV .
+
+  rl [delay-init-1] :
+    { delay-init(@OBJS:Objects,@MSGS:Msgs,(@M:Msg :: @ML:MsgList)) @C:Config | @T:Float }
+  =>
+    { delay-init(@OBJS:Objects,@MSGS:Msgs,@ML:MsgList) @C:Config [@T:Float + (sample(exponential(100.0))[rand]), @M:Msg] | @T:Float } .
+
+  rl [delay-init-2] : delay-init(@OBJS:Objects,@MSGS:Msgs,nil) => null .
+
+  
+  eq testDIP = 30 .
+  eq testOIP = 10 .
+  
+  op initconf : -> Config .
+  eq initconf =    (to testOIP : bootstrap)
+                   < 10 : Node | rreqID: 100,
+                                 sequenceNumber: 1,
+                                 routingTable: empty,
+                                 requestBuffer: empty,
+			    			     neighbors: 20 >
+                   < 20 : Node | rreqID: 100,
+                                 sequenceNumber: 1,
+                                 routingTable: empty,
+                                 requestBuffer: empty,
+			    			     neighbors: (10 ; 30) >
+                   < 30 : Node | rreqID: 100,
+                                 sequenceNumber: 1,
+                                 routingTable: empty,
+                                 requestBuffer: empty,
+			    			     neighbors: 20 > . 		  
+endm

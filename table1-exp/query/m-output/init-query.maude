@@ -1,0 +1,80 @@
+load query
+
+mod INIT-QUERY is
+  inc QUERY .
+  
+  *** P
+  *** two rules for initial-state: fixed
+  *** except exponential(0.1) from ../input-modules/pi-query.maude
+  rl [delay-init-1] :
+     { delay-init(@OBJS:Objects,@MSGS:Msgs,(@M:Msg :: @ML:MsgList)) @C:Config | @T:Float }
+  =>
+     { delay-init(@OBJS:Objects,@MSGS:Msgs,@ML:MsgList) @C:Config
+     [@T:Float + (sample(exponential(0.1))[rand]), @M:Msg] | @T:Float } .
+     
+  rl [delay-init-2] : delay-init(@OBJS:Objects,@MSGS:Msgs,nil) => null .
+  
+  
+  ops c1 c2 c3 c4 c5 c6 s1 s2 s3 : -> Oid [ctor] . 
+  ops k1 k2 k3 : -> Key [ctor] .
+   
+  *** M 
+  op initconf : -> Config .
+  eq initconf = 
+     < log : Monitor | events: empty >  
+
+     (to c1 : read(1,k1))  
+     ---(to c2 : read(2,k2))
+     ---(to c2 : read(2,k1))
+     
+     ---(
+     (to c1 : read(1,k1) :: read(4,k2) :: read(7,k3))  
+     (to c2 : read(2,k2) :: read(5,k3) :: read(8,k1))
+     (to c3 : read(3,k3) :: read(6,k1) :: read(9,k2))
+     
+     (to c4 : read(11,k1) :: read(14,k2) :: read(17,k3))  
+     (to c5 : read(12,k2) :: read(15,k3) :: read(18,k1))
+     
+ 
+ 
+     (to s1 : write(k1,1,101)) 
+     (to s2 : write(k1,1,101))
+     (to s3 : write(k2,2,102))
+     
+      
+     (to s1 : write(k3,3,103))
+     (to s2 : write(k2,2,102))
+     (to s3 : write(k3,3,103))     
+     )
+     
+     (to s1 : write(k1,1,101))      
+     ---(to s2 : write(k1,1,101))
+     ---(to s2 : write(k2,2,102))     
+     
+     ---(
+     (to c1 : read(1,k1))  
+     (to c2 : read(2,k2))  
+     
+     (to s1 : write(k1,1,101)) 
+     (to s2 : write(k1,1,101))
+     
+     (to s3 : write(k2,2,102))
+     (to s2 : write(k2,2,102))
+     )
+     < c1 : Client | queries: ept, waiting: empty, results: empty,
+                     replicas: (k1 |-> (s1 ; s2), k2 |-> (s2 ; s3), k3 |-> (s1 ; s3)) >
+     < c2 : Client | queries: ept, waiting: empty, results: empty,
+                     replicas: (k1 |-> (s1 ; s2), k2 |-> (s2 ; s3), k3 |-> (s1 ; s3)) >
+     < c3 : Client | queries: ept, waiting: empty, results: empty,
+                     replicas: (k1 |-> (s1 ; s2), k2 |-> (s2 ; s3), k3 |-> (s1 ; s3)) >
+                     
+     < c4 : Client | queries: ept, waiting: empty, results: empty,
+                     replicas: (k1 |-> (s1 ; s2), k2 |-> (s2 ; s3), k3 |-> (s1 ; s3)) >
+
+     < c5 : Client | queries: ept, waiting: empty, results: empty,
+                     replicas: (k1 |-> (s1 ; s2), k2 |-> (s2 ; s3), k3 |-> (s1 ; s3)) >
+              
+     < s1 : Server | database: (k1 |-> < 11, 1 >, k3 |-> < 13, 3 >) >
+     < s2 : Server | database: (k1 |-> < 11, 1 >, k2 |-> < 12, 2 >) >
+     < s3 : Server | database: (k2 |-> < 12, 2 >, k3 |-> < 13, 3 >) > .
+endm

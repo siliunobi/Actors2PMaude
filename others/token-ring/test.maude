@@ -1,0 +1,21 @@
+load p-output/init-tokenring
+***load m-output/m-p-init-query
+
+mod TEST is
+  inc INTERFACE .
+  inc INIT-TOKENRING .
+
+  *** PVeStA interface
+  eq initState = init(initconf) .  
+
+endm
+
+set clear rules off .
+
+rew initState .
+
+rew initState .
+
+rew initState .
+
+q

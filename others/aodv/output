@@ -1,0 +1,37 @@
+==========================================
+rewrite in TEST : initState .
+rewrites: 48 in 0ms cpu (0ms real) (188235 rewrites/second)
+result Config: 
+{
+< 10 : Node | neighbors: 20,rreqID: 101,sequenceNumber: 2,routingTable: empty,
+    requestBuffer: (10 ~ 100) > 
+< 20 : Node | neighbors: (10 ; 30),rreqID: 100,sequenceNumber: 1,routingTable:
+    empty,requestBuffer: empty > 
+< 30 : Node | neighbors: 20,rreqID: 100,sequenceNumber: 1,routingTable: empty,
+    requestBuffer: empty > |
+5.9999659954903684e-3}
+==========================================
+rewrite in TEST : initState .
+rewrites: 47 in 0ms cpu (0ms real) (9400000 rewrites/second)
+result Config: 
+{
+< 10 : Node | neighbors: 20,rreqID: 101,sequenceNumber: 2,routingTable: empty,
+    requestBuffer: (10 ~ 100) > 
+< 20 : Node | neighbors: (10 ; 30),rreqID: 100,sequenceNumber: 1,routingTable:
+    empty,requestBuffer: empty > 
+< 30 : Node | neighbors: 20,rreqID: 100,sequenceNumber: 1,routingTable: empty,
+    requestBuffer: empty > |
+5.2282294401850126e-3}
+==========================================
+rewrite in TEST : initState .
+rewrites: 47 in 0ms cpu (0ms real) (1740740 rewrites/second)
+result Config: 
+{
+< 10 : Node | neighbors: 20,rreqID: 101,sequenceNumber: 2,routingTable: empty,
+    requestBuffer: (10 ~ 100) > 
+< 20 : Node | neighbors: (10 ; 30),rreqID: 100,sequenceNumber: 1,routingTable:
+    empty,requestBuffer: empty > 
+< 30 : Node | neighbors: 20,rreqID: 100,sequenceNumber: 1,routingTable: empty,
+    requestBuffer: empty > |
+3.3520792523955415e-3}
+Bye.

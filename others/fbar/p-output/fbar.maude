@@ -1,0 +1,357 @@
+load ../apmaude
+
+mod SORTS is
+  inc SCHEDULING .
+
+  subsort Nat < Oid .
+  
+  sorts Key Data .
+
+  op mmetric : -> Key .
+  op map : Oid Oid Nat -> Nat .
+  ops data0 data1 : -> Data .
+  op sid : Oid Nat -> Key .
+
+  sorts Pair PList .
+  subsort Pair < PList .  
+  op pair : Oid Nat -> Pair .
+  op nil : -> PList [ctor] .
+  op _;;_ : PList PList -> PList [ctor assoc id: nil] .
+  
+  sort OidSet .
+  subsort Oid < OidSet .
+  op emptyOidSet : -> OidSet [ctor] .
+  op _;_ : OidSet OidSet -> OidSet [ctor comm assoc id: emptyOidSet] .
+  
+  sort OidList .
+  subsort Oid < OidList .
+  op emptyOidList : -> OidList [ctor] .
+  op _;;_ : OidList OidList -> OidList [ctor assoc id: emptyOidList] .
+  
+  sort Payloads .
+  subsort Payload < Payloads .
+  op ept : -> Payloads [ctor] .
+  op _;_ : Payloads Payloads -> Payloads [ctor comm assoc id: ept] .
+  
+  sort PayloadList .
+  subsort Payload < PayloadList .
+  op nil : -> PayloadList [ctor] .
+  op _;;_ : PayloadList PayloadList -> PayloadList [ctor assoc id: nil] .
+endm
+view Key from TRIV to SORTS is sort Elt to Key . endv 
+
+
+mod OBJS is
+  inc SORTS .
+  pr MAP{Key,Nat} * (sort Map{Key,Nat} to Dict,
+                     op undefined to udf) .
+    
+  *** Node ***
+  op Node  :                   -> ObjType .
+  op neighbors:_ :   OidSet    -> Attribute .
+  op mem:_ :         Dict      -> Attribute .
+  op table:_ :       Dict      -> Attribute .
+  op buffer:_ :      Payloads  -> Attribute .
+  
+  *** Msg ***
+  
+  *** pScout : sId loc  src  dst  pathmsg 
+  op pScout : Key Oid Oid Oid PList -> Payload .
+  *** pFlow : sId loc  dst  last pathmsg 
+  op pFlow : Key Oid Oid Oid PList -> Payload . 
+  *** pData : data sId loc  dstmsg 
+  op pData : Data Key Oid Oid -> Payload .
+  *** Wait : sId data srcmsg 
+  op Wait : Key Data Oid -> Payload .
+  
+  op send_from_to_of_ : Data Oid Oid Key -> Payload . 
+  op start : -> Payload .
+endm
+
+
+load ../input-modules/pi-fbar.maude
+load ../sampling-lib
+
+mod FBAR is
+  inc PI-FBAR .
+  inc SAMPLING-LIB .
+  inc OBJS .
+
+  vars N N' M M' SRC DST O : Oid .
+  vars CS CS' : Payloads .  
+  vars AS : Attributes .
+  vars SID K : Key .
+  var L : PList . 
+  var DATA : Data .
+  vars S OS : OidSet .
+  vars DICT TB : Dict .
+  vars METRIC METRIC' V V' : Nat .
+    
+
+  eq (send DATA from SRC to DST of SID)
+   = pScout(SID, SRC, SRC, DST, nil) ; Wait(SID, DATA, SRC) .
+   	
+
+  rl [Start] :
+  {
+    (to N : start)
+    < N : Node | buffer: CS, AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  =>
+  {
+    < N : Node | buffer: wait(CS), AS >
+    delay-Start(N,CS,AS,sort(  genScout(CS)  ))
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  } .
+
+  op delay-Start : Oid Payloads Attributes MsgList -> DTask .
+  rl [delay-Start-1] :
+    { delay-Start(N,CS,AS,(@M:Msg :: @ML:MsgList)) @C:Config | @T:Float }
+  =>
+    { delay-Start(N,CS,AS,@ML:MsgList) @C:Config
+    [@T:Float + (delta-Start(N,CS,AS)[sample(lognormal(0.0,1.0))[rand]]), @M:Msg] | @T:Float } .
+  rl [delay-Start-2] : delay-Start(N,CS,AS,nil) => null .
+
+
+  op genScout : Payloads -> Msgs . 
+  eq genScout(pScout(SID, N, SRC, DST, L) ; CS)
+   = (to N from N : pScout(SID, N, SRC, DST, L))
+     genScout(CS) .
+  eq genScout(Wait(SID,DATA,SRC) ; CS) = genScout(CS) .
+  eq genScout(ept) = null .	 
+
+  op wait : Payloads -> Payloads .
+  eq wait(Wait(SID,DATA,SRC) ; CS) = Wait(SID,DATA,SRC) ; wait(CS) .
+  eq wait(pScout(SID, N, SRC, DST, L) ; CS) = wait(CS) .
+  eq wait(ept) = ept .
+  
+  
+  rl [RecScout-init] :
+  {
+    (to N from N : pScout(SID, N, M, M', nil))
+    < N : Node | neighbors: S, mem: DICT, AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  =>
+  {
+    < N : Node | neighbors: S, mem: DICT, AS >
+    delay-RecScout-init(N,S,DICT,AS,SID,M,M',sort(  scoutNeighbors(SID,S,N,M,M',pair(N,DICT[mmetric]))  ))
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  } .
+
+  op delay-RecScout-init : Oid OidSet Dict Attributes Key Oid Oid MsgList -> DTask .
+  rl [delay-RecScout-init-1] :
+    { delay-RecScout-init(N,S,DICT,AS,SID,M,M',(@M:Msg :: @ML:MsgList)) @C:Config | @T:Float }
+  =>
+    { delay-RecScout-init(N,S,DICT,AS,SID,M,M',@ML:MsgList) @C:Config
+    [@T:Float + (delta-RecScout-init(N,S,DICT,AS,SID,M,M')[sample(lognormal(0.0,1.0))[rand]]), @M:Msg] | @T:Float } .
+  rl [delay-RecScout-init-2] : delay-RecScout-init(N,S,DICT,AS,SID,M,M',nil) => null .
+
+
+
+  op scoutNeighbors : Key OidSet Oid Oid Oid PList -> Msgs .
+  eq scoutNeighbors(SID,(O ; OS),N,M,M',L) 
+   = scoutNeighbors(SID,OS,N,M,M',L)
+     (to O from N : pScout(SID,O,M,M',L)) .
+  eq scoutNeighbors(SID,emptyOidSet,N,M,M',L) = null .
+  
+
+  crl [RecScout-1] :
+  {
+    (to N from N' : pScout(SID, N, M, M', (pair(N', METRIC) ;; L)))
+    < N : Node | neighbors: S, mem: DICT, AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  =>
+  {
+    < N : Node | neighbors: S, mem: insert(SID,METRIC + DICT[mmetric], DICT), AS >
+    delay-RecScout-1(N,S,DICT,AS,N',SID,M,M',METRIC,L,sort(  scoutNeighbors(SID, S, N, M, M', (pair(N, METRIC + DICT[mmetric]) ;; pair(N', METRIC) ;; L))  ))
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  if (METRIC + DICT[mmetric] slt DICT[SID]) /\ (N =/= M') .
+
+  op delay-RecScout-1 : Oid OidSet Dict Attributes Oid Key Oid Oid Nat PList MsgList -> DTask .
+  rl [delay-RecScout-1-1] :
+    { delay-RecScout-1(N,S,DICT,AS,N',SID,M,M',METRIC,L,(@M:Msg :: @ML:MsgList)) @C:Config | @T:Float }
+  =>
+    { delay-RecScout-1(N,S,DICT,AS,N',SID,M,M',METRIC,L,@ML:MsgList) @C:Config
+    [@T:Float + (delta-RecScout-1(N,S,DICT,AS,N',SID,M,M',METRIC,L)[sample(lognormal(0.0,1.0))[rand]]), @M:Msg] | @T:Float } .
+  rl [delay-RecScout-1-2] : delay-RecScout-1(N,S,DICT,AS,N',SID,M,M',METRIC,L,nil) => null .
+
+
+
+  *** strictly less than
+  op _slt_ : Nat Nat -> Bool .
+  eq V slt udf = true .
+  eq V slt V' = V < V' [owise] .
+  
+  crl [RecScout-2] :
+  {
+    (to N from N' : pScout(SID,N, M, M', (pair(N', METRIC) ;; L)))
+    < N : Node | mem: DICT, AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  =>
+  {
+    < N : Node | mem: DICT, AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  if (not (METRIC + DICT[mmetric] slt DICT[SID])) /\ (N =/= M') .
+
+	  
+	  
+  *** error?? ***
+  *** Last write wins, but may not be the optimal
+  rl [SendFlow] :
+  {
+    (to N from N' : pScout(SID,N, M, N, (pair(N',METRIC) ;; L)))
+    < N : Node | mem: DICT, AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  =>
+  {
+    < N : Node | mem: insert(SID, METRIC, DICT), AS >
+    delay-SendFlow(N,DICT,AS,N',SID,M,METRIC,L,sort(  (to N' from N : pFlow(SID,N', N, N, (pair(N', METRIC) ;; L)))  ))
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  } .
+
+  op delay-SendFlow : Oid Dict Attributes Oid Key Oid Nat PList MsgList -> DTask .
+  rl [delay-SendFlow-1] :
+    { delay-SendFlow(N,DICT,AS,N',SID,M,METRIC,L,(@M:Msg :: @ML:MsgList)) @C:Config | @T:Float }
+  =>
+    { delay-SendFlow(N,DICT,AS,N',SID,M,METRIC,L,@ML:MsgList) @C:Config
+    [@T:Float + (delta-SendFlow(N,DICT,AS,N',SID,M,METRIC,L)[sample(lognormal(0.0,1.0))[rand]]), @M:Msg] | @T:Float } .
+  rl [delay-SendFlow-2] : delay-SendFlow(N,DICT,AS,N',SID,M,METRIC,L,nil) => null .
+
+
+
+  *** Error!! 
+  crl [RecFlow-1] :
+  {
+    (to N from N' : pFlow(SID, N, M, N', (pair(N, METRIC) ;; L ;; pair(SRC,METRIC'))))
+    < N : Node | mem: DICT, AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  =>
+  {
+    < N : Node | mem: DICT, AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  if DICT[SID] =/= METRIC /\ N =/= SRC .
+
+
+  crl [RecFlow-2] :
+  {
+    (to N from N' : pFlow(SID, N, M, N', (pair(N, METRIC) ;; pair(M', METRIC') ;; L)))
+    < N : Node | mem: DICT, table: TB, AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  =>
+  {
+    < N : Node | mem: DICT, table: insert(SID, map(M, N', METRIC), TB), AS >
+    delay-RecFlow-2(N,DICT,TB,AS,N',SID,M,METRIC,M',METRIC',L,sort(  (to M' from N : pFlow(SID, M', M, N,(pair(M', METRIC') ;; L)))  ))
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  if DICT[SID] == METRIC .
+
+  op delay-RecFlow-2 : Oid Dict Dict Attributes Oid Key Oid Nat Oid Nat PList MsgList -> DTask .
+  rl [delay-RecFlow-2-1] :
+    { delay-RecFlow-2(N,DICT,TB,AS,N',SID,M,METRIC,M',METRIC',L,(@M:Msg :: @ML:MsgList)) @C:Config | @T:Float }
+  =>
+    { delay-RecFlow-2(N,DICT,TB,AS,N',SID,M,METRIC,M',METRIC',L,@ML:MsgList) @C:Config
+    [@T:Float + (delta-RecFlow-2(N,DICT,TB,AS,N',SID,M,METRIC,M',METRIC',L)[sample(lognormal(0.0,1.0))[rand]]), @M:Msg] | @T:Float } .
+  rl [delay-RecFlow-2-2] : delay-RecFlow-2(N,DICT,TB,AS,N',SID,M,METRIC,M',METRIC',L,nil) => null .
+
+	  
+  rl [EndFlow] :
+  {
+    (to N from N' : pFlow(SID, N, M, N', pair(N, METRIC)))
+    < N : Node | table: TB, AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  =>
+  {
+    < N : Node | table: insert(SID, map(M, N', METRIC), TB), AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  } .
+
+	 
+
+  rl [Send] :
+  {
+    < N : Node | table: (K |-> map(M, M', METRIC), TB), buffer: (CS ; Wait(K, DATA, N)), AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  =>
+  {
+    < N : Node | table: (K |-> map(M, M', METRIC), TB), buffer: CS, AS >
+    delay-Send(N,K,M,M',METRIC,TB,CS,DATA,AS,sort(  (to M' from N : pData(DATA, K, M', M))  ))
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  } .
+
+  op delay-Send : Oid Key Oid Oid Nat Dict Payloads Data Attributes MsgList -> DTask .
+  rl [delay-Send-1] :
+    { delay-Send(N,K,M,M',METRIC,TB,CS,DATA,AS,(@M:Msg :: @ML:MsgList)) @C:Config | @T:Float }
+  =>
+    { delay-Send(N,K,M,M',METRIC,TB,CS,DATA,AS,@ML:MsgList) @C:Config
+    [@T:Float + (delta-Send(N,K,M,M',METRIC,TB,CS,DATA,AS)[sample(lognormal(0.0,1.0))[rand]]), @M:Msg] | @T:Float } .
+  rl [delay-Send-2] : delay-Send(N,K,M,M',METRIC,TB,CS,DATA,AS,nil) => null .
+
+  eq objectEnabled(< N : Node | table: (K |-> map(M, M', METRIC), TB), buffer: (CS ; Wait(K, DATA, N)), AS > )
+    = true .
+
+	 
+	 
+  crl [RecData] :
+  {
+    (to N from O : pData(DATA, K, N, N'))
+    < N : Node | table: (K |-> map(N', M, METRIC), TB), AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  =>
+  {
+    < N : Node | table: (K |-> map(N', M, METRIC), TB), AS >
+    delay-RecData(N,O,DATA,K,N',M,METRIC,TB,AS,sort(  (to M from N : pData(DATA, K, M, N'))  ))
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  if N =/= N' .
+
+  op delay-RecData : Oid Oid Data Key Oid Oid Nat Dict Attributes MsgList -> DTask .
+  rl [delay-RecData-1] :
+    { delay-RecData(N,O,DATA,K,N',M,METRIC,TB,AS,(@M:Msg :: @ML:MsgList)) @C:Config | @T:Float }
+  =>
+    { delay-RecData(N,O,DATA,K,N',M,METRIC,TB,AS,@ML:MsgList) @C:Config
+    [@T:Float + (delta-RecData(N,O,DATA,K,N',M,METRIC,TB,AS)[sample(lognormal(0.0,1.0))[rand]]), @M:Msg] | @T:Float } .
+  rl [delay-RecData-2] : delay-RecData(N,O,DATA,K,N',M,METRIC,TB,AS,nil) => null .
+
+	  
+	  
+  crl [RecData-1] :
+  {
+    (to N from O : pData(DATA,SID,N,N'))
+    < N : Node | table: TB, AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  =>
+  {
+    < N : Node | table: TB, AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  if (not $hasMapping(TB,SID)) /\ (N =/= N') .
+
+	  
+
+  rl [RecData-2] :
+  {
+    (to N from O : pData(DATA,SID,N,N))
+    < N : Node | AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  }
+  =>
+  {
+    < N : Node | AS >
+    @OBJS:Objects @DMS:DMsgs | @T:Float
+  } .
+
+endm

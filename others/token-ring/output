@@ -1,0 +1,49 @@
+==========================================
+rewrite in TEST : initState .
+rewrites: 280 in 10ms cpu (12ms real) (27168 rewrites/second)
+result Config: 
+{
+< n1 : Node | state: waitForCS,next: n2 > 
+< n2 : Node | state: outsideCS,next: n3 > 
+< n3 : Node | state: outsideCS,next: n4 > 
+< n4 : Node | state: outsideCS,next: n5 > 
+< n5 : Node | state: waitForCS,next: n6 > 
+< n6 : Node | state: outsideCS,next: n7 > 
+< n7 : Node | state: outsideCS,next: n8 > 
+< n8 : Node | state: outsideCS,next: n9 > 
+< n9 : Node | state: waitForCS,next: n10 > 
+< n10 : Node | state: outsideCS,next: n1 > |
+5.9999659954903679}
+==========================================
+rewrite in TEST : initState .
+rewrites: 280 in 10ms cpu (11ms real) (26843 rewrites/second)
+result Config: 
+{
+< n1 : Node | state: waitForCS,next: n2 > 
+< n2 : Node | state: outsideCS,next: n3 > 
+< n3 : Node | state: outsideCS,next: n4 > 
+< n4 : Node | state: outsideCS,next: n5 > 
+< n5 : Node | state: waitForCS,next: n6 > 
+< n6 : Node | state: outsideCS,next: n7 > 
+< n7 : Node | state: outsideCS,next: n8 > 
+< n8 : Node | state: outsideCS,next: n9 > 
+< n9 : Node | state: waitForCS,next: n10 > 
+< n10 : Node | state: outsideCS,next: n1 > |
+5.0623057987249114}
+==========================================
+rewrite in TEST : initState .
+rewrites: 279 in 8ms cpu (11ms real) (31411 rewrites/second)
+result Config: 
+{
+< n1 : Node | state: waitForCS,next: n2 > 
+< n2 : Node | state: outsideCS,next: n3 > 
+< n3 : Node | state: outsideCS,next: n4 > 
+< n4 : Node | state: outsideCS,next: n5 > 
+< n5 : Node | state: waitForCS,next: n6 > 
+< n6 : Node | state: outsideCS,next: n7 > 
+< n7 : Node | state: outsideCS,next: n8 > 
+< n8 : Node | state: outsideCS,next: n9 > 
+< n9 : Node | state: waitForCS,next: n10 > 
+< n10 : Node | state: outsideCS,next: n1 > |
+8.588363138749866}
+Bye.

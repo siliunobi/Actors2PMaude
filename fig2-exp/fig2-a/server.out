@@ -1,0 +1,306 @@
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test9-1.maude
+model arguments: 	
+formula: 	reduction.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	1687817641
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Server: Running the simulation batches on demand... Please wait.
+Server performed 1 batch(es) of 60 simulation(s) each.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test9-2.maude
+model arguments: 	
+formula: 	reduction.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	1730677583
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Server: Running the simulation batches on demand... Please wait.
+Server performed 1 batch(es) of 60 simulation(s) each.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test9-3.maude
+model arguments: 	
+formula: 	reduction.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	364289320
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Server: Running the simulation batches on demand... Please wait.
+Server performed 1 batch(es) of 60 simulation(s) each.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test9-4.maude
+model arguments: 	
+formula: 	reduction.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	42145319
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Server: Running the simulation batches on demand... Please wait.
+Server performed 1 batch(es) of 60 simulation(s) each.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test9-5.maude
+model arguments: 	
+formula: 	reduction.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	492790234
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Server: Running the simulation batches on demand... Please wait.
+Server performed 1 batch(es) of 60 simulation(s) each.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test9-6.maude
+model arguments: 	
+formula: 	reduction.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	1955904589
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Server: Running the simulation batches on demand... Please wait.
+Server performed 1 batch(es) of 60 simulation(s) each.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test7-1.maude
+model arguments: 	
+formula: 	reduction.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	589650244
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Server: Running the simulation batches on demand... Please wait.
+Server performed 1 batch(es) of 60 simulation(s) each.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test7-2.maude
+model arguments: 	
+formula: 	reduction.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	358787145
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Server: Running the simulation batches on demand... Please wait.
+Server performed 1 batch(es) of 60 simulation(s) each.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test7-3.maude
+model arguments: 	
+formula: 	reduction.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	810644759
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Server: Running the simulation batches on demand... Please wait.
+Server performed 1 batch(es) of 60 simulation(s) each.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test7-4.maude
+model arguments: 	
+formula: 	reduction.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	379232799
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Server: Running the simulation batches on demand... Please wait.
+Server performed 1 batch(es) of 60 simulation(s) each.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test7-5.maude
+model arguments: 	
+formula: 	reduction.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	639795789
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Server: Running the simulation batches on demand... Please wait.
+Server performed 1 batch(es) of 60 simulation(s) each.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test7-6.maude
+model arguments: 	
+formula: 	reduction.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	1934732480
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Server: Running the simulation batches on demand... Please wait.
+Server performed 1 batch(es) of 60 simulation(s) each.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test5-1.maude
+model arguments: 	
+formula: 	reduction.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	1670094583
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Server: Running the simulation batches on demand... Please wait.
+Server performed 1 batch(es) of 60 simulation(s) each.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test5-2.maude
+model arguments: 	
+formula: 	reduction.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	589032062
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Server: Running the simulation batches on demand... Please wait.
+Server performed 1 batch(es) of 60 simulation(s) each.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test5-3.maude
+model arguments: 	
+formula: 	reduction.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	1999630601
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Server: Running the simulation batches on demand... Please wait.
+Server performed 1 batch(es) of 60 simulation(s) each.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test5-4.maude
+model arguments: 	
+formula: 	reduction.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	283097266
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Server: Running the simulation batches on demand... Please wait.
+Server performed 1 batch(es) of 60 simulation(s) each.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test5-5.maude
+model arguments: 	
+formula: 	reduction.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	758451905
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Server: Running the simulation batches on demand... Please wait.
+Server performed 1 batch(es) of 60 simulation(s) each.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test5-6.maude
+model arguments: 	
+formula: 	reduction.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	823912963
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Server: Running the simulation batches on demand... Please wait.
+Server performed 1 batch(es) of 60 simulation(s) each.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test.maude
+model arguments: 	
+formula: 	ryw.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	2095326053
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Failed to perform simulation runs.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test.maude
+model arguments: 	
+formula: 	ryw.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	1402217197
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Failed to perform simulation runs.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test.maude
+model arguments: 	
+formula: 	ryw.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	1610979274
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Failed to perform simulation runs.
+
+Server is now accepting a new connection...
+
+Parameters: 
+model: 		test.maude
+model arguments: 	
+formula: 	ryw.quatex
+alpha: 		0.05
+beta: 		0.0
+seed: 	1278531223
+sims: 		60
+Params: 		0.05 0.01 0.01 10000000 0.0 0 
+Failed to perform simulation runs.
+
+Server is now accepting a new connection...

@@ -1,0 +1,31 @@
+MultiVeStA client: started at 28-03-2022, 15:07:53.
+MultiVeStA client: it has been required to run 1 MultiVeStA server locally
+The MultiVeStA server has been launched. Waiting for its initialisation. 
+default_port_to_wait at NewVestaServer 33635
+The MultiVeStA server is ready.
+kindOfSimulation: ONESTEP
+model: test.maude
+other parameters: -mc maude
+formula: eventual.multiquatex
+alpha: 0.01
+delta1: 0.01
+class name of the statedescriptor: vesta.pmaude.NewAPMaudeState
+block size (# simulations done before checking the IC if using independent replications): 60
+max number of simulation runs (if using independent replications): 2147483647
+seed of the seeds: -1. It will be generated using the default one: the current milliseconds.
+Parallelism degree: 1
+
+MultiVeStA client: running the simulations... Please wait.
+
+MultiVeStA client: still 1 query to be evaluated
+MultiVeStA client: Batch 1 of simulations completed at 15:08:04.
+
+MultiVeStA client: analysis completed.
+ Samples generated for query 0 (#LatestV()): 60
+
+MultiVeStA client: Results:
+ result of query 0 (#LatestV()):
+	1.0 [var: 0.0, ci/2: 0.0]
+
+Net time to perform the analysis: 10.913 seconds
+
