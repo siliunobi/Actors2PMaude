@@ -1,6 +1,6 @@
 # Artifact Overview
 
-Here are the artifacts used to (re)produce the experimental results in paper234 "Bridging the Semantic Gap between Qualitative and Quantitative Models of Distributed Systems". After describing the repo organization and dependency/system requirements, we show how to quickly get started with reproducing our experimental results.
+Here are the artifacts used to (re)produce the experimental results in the paper "Bridging the Semantic Gap between Qualitative and Quantitative Models of Distributed Systems". After describing the repo organization and dependency/system requirements, we show how to quickly get started with reproducing our experimental results.
 
 # Repo Organization
 
